@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Happy Girlfriend Day - Interactive Digital Surprise & Romantic Memory Experience">
+    <meta name="theme-color" content="#0f0a1c">
+    <title>Happy Girlfriend Day, My Forever Love 💕</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Great+Vibes&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Sacramento&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
+
+    <link rel="stylesheet" href="mybaby.css">
+</head>
+<body>
+
+    <div id="passcodeGate" class="passcode-overlay">
+        <div class="passcode-box glass-panel">
+            <div class="lock-icon"><i class="fa-solid fa-heart-lock"></i></div>
+            <h2>A Special Lock for My Favorite Person</h2>
+            <p>Enter our secret 4-digit passcode to unlock your Girlfriend Day surprise!</p>
+            <p class="hint-text">(Hint: The day we decided to try again 💕)</p>
+            
+            <div class="passcode-inputs">
+                <input type="password" maxlength="1" class="pass-digit" id="digit1" autofocus autocomplete="off">
+                <input type="password" maxlength="1" class="pass-digit" id="digit2" autocomplete="off">
+                <input type="password" maxlength="1" class="pass-digit" id="digit3" autocomplete="off">
+                <input type="password" maxlength="1" class="pass-digit" id="digit4" autocomplete="off">
+            </div>
+            
+            <button class="btn-main primary-btn" id="unlockBtn" onclick="appUI.verifyPasscode()">
+                <i class="fa-solid fa-key"></i> Unlock My Surprise
+            </button>
+            <p id="passcodeError" class="error-msg"></p>
+        </div>
+    </div>
+
+    <canvas id="heartsCanvas"></canvas>
+
+    <div class="floating-audio-bar" id="floatingAudioBar">
+        <div class="bar-controls">
+            <button class="music-btn" id="musicToggle" title="Show/Hide Our Song Player">
+                <i class="fa-solid fa-music"></i>
+            </button>
+            <div class="track-info-pill" id="trackPill">
+                <span class="track-title" id="trackTitle">Love Me JeJe - Tems</span>
+                <canvas id="visualizerCanvas" width="60" height="20"></canvas>
+            </div>
+            <button class="sound-sfx-btn" id="sfxToggle" title="Toggle Sound Effects">
+                <i class="fa-solid fa-volume-high"></i>
+            </button>
+        </div>
+
+        <div class="mini-player-panel" id="miniPlayerPanel">
+            <div class="song-switcher">
+                <button class="song-tab active" data-track-key="love-me-jeje">Love Me JeJe</button>
+                <button class="song-tab" data-track-key="pov">pov</button>
+                <button class="song-tab" data-track-key="all-the-love">All The Love</button>
+            </div>
+            <iframe id="bgMusicPlayer" style="border-radius:12px" src="https://audiomack.com/embed/song/temsbaby/love-me-jeje" width="280" height="252" frameBorder="0" scrolling="no" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            <div id="spotifyPovPlayer" style="display:none;"></div>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <div class="container" id="mainContent">
+
+        <header class="hero">
+            <div class="hero-portrait">
+                <div class="hero-portrait-ring">
+                    <img src="images/46.jpeg" alt="My Forever Love">
+                </div>
+            </div>
+
+            <div class="date-badge pulse-badge">
+                <i class="fa-solid fa-sparkles"></i> August 1 • Happy Girlfriend Day <i class="fa-solid fa-sparkles"></i>
+            </div>
+            
+            <h1 class="hero-title">To The Girl Who Owns My Heart</h1>
+            <div class="together-badge">
+                <i class="fa-solid fa-heart-pulse"></i> <span id="togetherText">Together Since July 7, 2026</span>
+            </div>
+            <p class="hero-subtitle">
+                Every second with you feels like a dream I never want to wake up from. Today is dedicated entirely to celebrating your smile, your warmth, and the incredible joy you bring to my life. 💕
+            </p>
+
+            <div class="countdown-card glass-panel">
+                <h3 class="countdown-label">Counting Every Special Moment Together</h3>
+                <div class="timer-grid">
+                    <div class="timer-box">
+                        <span class="timer-num" id="daysNum">00</span>
+                        <span class="timer-unit">Days</span>
+                    </div>
+                    <div class="timer-box">
+                        <span class="timer-num" id="hoursNum">00</span>
+                        <span class="timer-unit">Hours</span>
+                    </div>
+                    <div class="timer-box">
+                        <span class="timer-num" id="minsNum">00</span>
+                        <span class="timer-unit">Mins</span>
+                    </div>
+                    <div class="timer-box">
+                        <span class="timer-num" id="secsNum">00</span>
+                        <span class="timer-unit">Secs</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-actions">
+                <a href="#letterSection" class="btn-main primary-btn">
+                    <i class="fa-solid fa-envelope-open-text"></i> Read Your Love Letter
+                </a>
+                <a href="#voiceNoteSection" class="btn-main secondary-btn">
+                    <i class="fa-solid fa-microphone"></i> Listen to Voice Note
+                </a>
+            </div>
+        </header>
+
+        <section class="glass-card" id="voiceNoteSection">
+            <div class="section-header">
+                <span class="section-tag">Listen Close</span>
+                <h2 class="section-title">A Special Voice Message For You 🎙️❤️</h2>
+            </div>
+
+            <div class="voice-card">
+                <div class="voice-avatar">
+                    <i class="fa-solid fa-heart pulse-heart"></i>
+                </div>
+                <div class="voice-info">
+                    <h3>"Why You Mean The World To Me"</h3>
+                    <p>Recorded with pure love just for Girlfriend Day</p>
+                    
+                    <div class="voice-controls">
+                        <button class="voice-play-btn" id="voicePlayBtn" onclick="appUI.toggleVoiceNote()">
+                            <i class="fa-solid fa-play" id="voicePlayIcon"></i>
+                        </button>
+                        <div class="voice-progress-container" onclick="appUI.seekVoiceNote(event)">
+                            <div class="voice-progress-bar" id="voiceProgressBar"></div>
+                        </div>
+                        <span class="voice-timer" id="voiceTimer">0:00 / 0:45</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="letterSection">
+            <div class="section-header">
+                <span class="section-tag">A Message From My Soul</span>
+                <h2 class="section-title">An Unsealed Love Letter 💌</h2>
+            </div>
+
+            <div class="envelope-wrapper">
+                <div class="envelope" id="envelope">
+                    <div class="envelope-flap"></div>
+                    <div class="heart-seal" id="heartSeal"><i class="fa-solid fa-heart"></i></div>
+                    <div class="letter-content" id="letterBox">
+                        <div class="letter-inner">
+                            <h3 class="letter-heading">My Dearest Love,</h3>
+                            <p class="letter-text">
+                                From the very moment you walked into my life, everything changed. You brought color to my quietest days, warmth to my coldest nights, and a laughter that heals parts of me I never knew were hurting.<br><br>
+                                I created this digital corner of the internet just for you—a small reflection of the endless affection I hold in my heart every single day. You are my confidante, my best friend, and my greatest blessing.<br><br>
+                                Thank you for simply being you—gentle, fierce, beautiful, and endlessly kind. Happy Girlfriend Day, my darling.
+                            </p>
+                            <div class="letter-signature">
+                                <span>Forever & Always Yours,</span>
+                                <h4 class="signature-name">Your Loving Partner ❤️</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="tap-instruction"><i class="fa-solid fa-hand-pointer"></i> Tap the seal to open & read your letter!</p>
+        </section>
+
+        <section class="glass-card music-card" id="musicSection">
+            <div class="section-header">
+                <span class="section-tag">Our Songs 🎵</span>
+                <h2 class="section-title gold-text">The Soundtrack To Us 💕</h2>
+            </div>
+            <p class="section-subtext">Pick a song and it'll load up in the player docked in the corner — it stays with you as you scroll through the whole site!</p>
+
+            <div class="song-picks-grid">
+                <div class="song-pick-card active" data-track-key="love-me-jeje">
+                    <div class="song-pick-icon"><i class="fa-solid fa-heart"></i></div>
+                    <h3>Love Me JeJe</h3>
+                    <p>Tems</p>
+                </div>
+
+                <div class="song-pick-card" data-track-key="pov">
+                    <div class="song-pick-icon"><i class="fa-solid fa-heart"></i></div>
+                    <h3>pov</h3>
+                    <p>Ariana Grande</p>
+                </div>
+
+                <div class="song-pick-card" data-track-key="all-the-love">
+                    <div class="song-pick-icon"><i class="fa-solid fa-heart"></i></div>
+                    <h3>All The Love</h3>
+                    <p>Ayra Starr</p>
+                </div>
+            </div>
+
+            <p class="tap-instruction"><i class="fa-solid fa-hand-pointer"></i> Tap a song, then hit play on the mini player up top!</p>
+        </section>
+
+        <section class="glass-card" id="timelineSection">
+            <div class="section-header">
+                <span class="section-tag">Memory Lane</span>
+                <h2 class="section-title gold-text">Our Journey Together 📖✨</h2>
+            </div>
+            <p class="section-subtext">Every step with you has been my favorite chapter.</p>
+
+            <div class="timeline-container">
+                <div class="timeline-item">
+                    <div class="timeline-dot">💖</div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">July 7, 2026</span>
+                        <h3>The First Time We Met</h3>
+                        <p>The day my entire world changed for the better. I knew from that moment you were someone special.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot">☕</div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">First Date</span>
+                        <h3>Butterflies & Coffee</h3>
+                        <p>Hours felt like minutes because talking with you was so effortless and warm.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot">🌹</div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">A Sweet Milestone</span>
+                        <h3>"I Love You"</h3>
+                        <p>Saying those three words and hearing them back was the best feeling in the world.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot">✈️</div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">Adventures</span>
+                        <h3>Our First Trip Together</h3>
+                        <p>Exploring new places hand-in-hand, creating core memories we will cherish forever.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot">🌟</div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">Today & Beyond</span>
+                        <h3>Happy Girlfriend Day!</h3>
+                        <p>Here’s to today, tomorrow, and every beautiful memory yet to come.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="reasonsSection">
+            <div class="section-header">
+                <span class="section-tag">Just A Few Of Many</span>
+                <h2 class="section-title gold-text">Reasons I Love You 🌹</h2>
+            </div>
+            <p class="section-subtext">Tap a card to reveal one more reason. There are infinitely more where these came from.</p>
+
+            <div class="reasons-grid">
+                <div class="reason-card" onclick="appUI.revealReason(this, 1)">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-front">
+                            <i class="fa-solid fa-heart"></i>
+                            <span>Reason #1</span>
+                            <small>Tap to reveal</small>
+                        </div>
+                        <div class="reason-card-back">
+                            <p>Because your laugh is my favorite sound in the entire world.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reason-card" onclick="appUI.revealReason(this, 2)">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-front">
+                            <i class="fa-solid fa-heart"></i>
+                            <span>Reason #2</span>
+                            <small>Tap to reveal</small>
+                        </div>
+                        <div class="reason-card-back">
+                            <p>Because you make even the most ordinary days feel like an adventure.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reason-card" onclick="appUI.revealReason(this, 3)">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-front">
+                            <i class="fa-solid fa-heart"></i>
+                            <span>Reason #3</span>
+                            <small>Tap to reveal</small>
+                        </div>
+                        <div class="reason-card-back">
+                            <p>Because you listen — really listen — to every little thing I tell you.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reason-card" onclick="appUI.revealReason(this, 4)">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-front">
+                            <i class="fa-solid fa-heart"></i>
+                            <span>Reason #4</span>
+                            <small>Tap to reveal</small>
+                        </div>
+                        <div class="reason-card-back">
+                            <p>Because your kindness toward everyone around you inspires me daily.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reason-card" onclick="appUI.revealReason(this, 5)">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-front">
+                            <i class="fa-solid fa-heart"></i>
+                            <span>Reason #5</span>
+                            <small>Tap to reveal</small>
+                        </div>
+                        <div class="reason-card-back">
+                            <p>Because I can be completely myself around you, no exceptions.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reason-card" onclick="appUI.revealReason(this, 6)">
+                    <div class="reason-card-inner">
+                        <div class="reason-card-front">
+                            <i class="fa-solid fa-heart"></i>
+                            <span>Reason #6</span>
+                            <small>Tap to reveal</small>
+                        </div>
+                        <div class="reason-card-back">
+                            <p>Because you believe in me on days I forget to believe in myself.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="bucketListSection">
+            <div class="section-header">
+                <span class="section-tag">Future Dreams</span>
+                <h2 class="section-title gold-text">Our Couple's Bucket List 📝✨</h2>
+            </div>
+            <p class="section-subtext">Tap any item as we complete them together!</p>
+
+            <div class="bucket-progress-wrapper">
+                <div class="bucket-progress-bar" id="bucketProgressBar"></div>
+            </div>
+            <p class="bucket-status-text" id="bucketStatusText">0 of 6 Dreams Completed 💕</p>
+
+            <div class="bucket-grid">
+                <div class="bucket-item" id="bucket1" onclick="appUI.toggleBucketItem('bucket1', 'Stargaze at the Beach 🌊⭐')">
+                    <div class="bucket-checkbox"><i class="fa-solid fa-check"></i></div>
+                    <div class="bucket-info">
+                        <h4>Stargaze at the Beach 🌊⭐</h4>
+                        <p>Blanket, ocean waves, and midnight stars.</p>
+                    </div>
+                </div>
+
+                <div class="bucket-item" id="bucket2" onclick="appUI.toggleBucketItem('bucket2', 'Take a Cooking Class 🍝')">
+                    <div class="bucket-checkbox"><i class="fa-solid fa-check"></i></div>
+                    <div class="bucket-info">
+                        <h4>Take a Cooking Class 🍝</h4>
+                        <p>Making fresh pasta together from scratch.</p>
+                    </div>
+                </div>
+
+                <div class="bucket-item" id="bucket3" onclick="appUI.toggleBucketItem('bucket3', 'Spontaneous Road Trip 🚗')">
+                    <div class="bucket-checkbox"><i class="fa-solid fa-check"></i></div>
+                    <div class="bucket-info">
+                        <h4>Spontaneous Road Trip 🚗</h4>
+                        <p>No destination planned, just snacks and good music.</p>
+                    </div>
+                </div>
+
+                <div class="bucket-item" id="bucket4" onclick="appUI.toggleBucketItem('bucket4', 'Blanket Fort Movie Night 🎪')">
+                    <div class="bucket-checkbox"><i class="fa-solid fa-check"></i></div>
+                    <div class="bucket-info">
+                        <h4>Blanket Fort Movie Night 🎪</h4>
+                        <p>Fairy lights, popcorn, and endless cuddles.</p>
+                    </div>
+                </div>
+
+                <div class="bucket-item" id="bucket5" onclick="appUI.toggleBucketItem('bucket5', 'Watch a Sunset Together 🌅')">
+                    <div class="bucket-checkbox"><i class="fa-solid fa-check"></i></div>
+                    <div class="bucket-info">
+                        <h4>Watch a Sunset Together 🌅</h4>
+                        <p>Find the highest view point and watch the dusk.</p>
+                    </div>
+                </div>
+
+                <div class="bucket-item" id="bucket6" onclick="appUI.toggleBucketItem('bucket6', 'Travel Overseas ✈️🌍')">
+                    <div class="bucket-checkbox"><i class="fa-solid fa-check"></i></div>
+                    <div class="bucket-info">
+                        <h4>Travel Overseas ✈️🌍</h4>
+                        <p>Passport stamps and unforgettable international memories.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="gallerySection">
+            <div class="section-header">
+                <span class="section-tag">Captured Magic</span>
+                <h2 class="section-title">Our Memory Polaroid Wall 📸</h2>
+            </div>
+
+            <div class="gallery-grid">
+                <div class="polaroid" onclick="appUI.openLightbox('images/19.jpeg', 'Unforgettable Moments ❤️')">
+                    <div class="polaroid-img-wrapper">
+                        <img src="images/19.jpeg" alt="Memory 19" loading="lazy">
+                        <span class="pin-icon">📍</span>
+                    </div>
+                    <div class="caption">Unforgettable Moments ❤️</div>
+                </div>
+
+                <div class="polaroid" onclick="appUI.openLightbox('images/20.jpeg', 'Your Gorgeous Smile ✨')">
+                    <div class="polaroid-img-wrapper">
+                        <img src="images/20.jpeg" alt="Memory 20" loading="lazy">
+                        <span class="pin-icon">📍</span>
+                    </div>
+                    <div class="caption">Your Gorgeous Smile ✨</div>
+                </div>
+
+                <div class="polaroid" onclick="appUI.openLightbox('images/22.jpeg', 'Hand in Hand Forever 🤝')">
+                    <div class="polaroid-img-wrapper">
+                        <img src="images/22.jpeg" alt="Memory 22" loading="lazy">
+                        <span class="pin-icon">📍</span>
+                    </div>
+                    <div class="caption">Hand in Hand Forever 🤝</div>
+                </div>
+
+                <div class="polaroid" onclick="appUI.openLightbox('images/34.jpeg', 'Pure Happiness 💕')">
+                    <div class="polaroid-img-wrapper">
+                        <img src="images/34.jpeg" alt="Memory 34" loading="lazy">
+                        <span class="pin-icon">📍</span>
+                    </div>
+                    <div class="caption">Pure Happiness 💕</div>
+                </div>
+
+                <div class="polaroid" onclick="appUI.openLightbox('images/35.jpeg', 'My Favorite View 🌸')">
+                    <div class="polaroid-img-wrapper">
+                        <img src="images/35.jpeg" alt="Memory 35" loading="lazy">
+                        <span class="pin-icon">📍</span>
+                    </div>
+                    <div class="caption">My Favorite View 🌸</div>
+                </div>
+
+                <div class="polaroid" onclick="appUI.openLightbox('images/38.jpeg', 'Starlight Magic 🌟')">
+                    <div class="polaroid-img-wrapper">
+                        <img src="images/38.jpeg" alt="Memory 38" loading="lazy">
+                        <span class="pin-icon">📍</span>
+                    </div>
+                    <div class="caption">Starlight Magic 🌟</div>
+                </div>
+
+                <div class="polaroid" onclick="appUI.openLightbox('images/46.jpeg', 'Endless Laughs Together 😂')">
+                    <div class="polaroid-img-wrapper">
+                        <img src="images/46.jpeg" alt="Memory 46" loading="lazy">
+                        <span class="pin-icon">📍</span>
+                    </div>
+                    <div class="caption">Endless Laughs Together 😂</div>
+                </div>
+
+                <div class="polaroid" onclick="appUI.openLightbox('images/53.jpeg', 'My Princess 👑')">
+                    <div class="polaroid-img-wrapper">
+                        <img src="images/53.jpeg" alt="Memory 53" loading="lazy">
+                        <span class="pin-icon">📍</span>
+                    </div>
+                    <div class="caption">My Princess 👑</div>
+                </div>
+
+                <div class="polaroid" onclick="appUI.openLightbox('images/54.jpeg', 'Always & Forever 💕')">
+                    <div class="polaroid-img-wrapper">
+                        <img src="images/54.jpeg" alt="Memory 54" loading="lazy">
+                        <span class="pin-icon">📍</span>
+                    </div>
+                    <div class="caption">Always & Forever 💕</div>
+                </div>
+
+                <div class="polaroid" onclick="appUI.openLightbox('images/63.jpeg', 'Precious Memories 🌹')">
+                    <div class="polaroid-img-wrapper">
+                        <img src="images/63.jpeg" alt="Memory 63" loading="lazy">
+                        <span class="pin-icon">📍</span>
+                    </div>
+                    <div class="caption">Precious Memories 🌹</div>
+                </div>
+
+                <div class="polaroid" onclick="appUI.openLightbox('images/64.jpeg', 'Sweetest Person Ever 🥰')">
+                    <div class="polaroid-img-wrapper">
+                        <img src="images/64.jpeg" alt="Memory 64" loading="lazy">
+                        <span class="pin-icon">📍</span>
+                    </div>
+                    <div class="caption">Sweetest Person Ever 🥰</div>
+                </div>
+
+                <div class="polaroid" onclick="appUI.openLightbox('images/65.jpeg', 'To Infinity and Beyond 🚀')">
+                    <div class="polaroid-img-wrapper">
+                        <img src="images/65.jpeg" alt="Memory 65" loading="lazy">
+                        <span class="pin-icon">📍</span>
+                    </div>
+                    <div class="caption">To Infinity and Beyond 🚀</div>
+                </div>
+
+                <div class="polaroid" onclick="appUI.openLightbox('images/WhatsApp Image 2026-07-31 at 17.06.18.jpeg', 'Sunshine in My Life ☀️')">
+                    <div class="polaroid-img-wrapper">
+                        <img src="images/WhatsApp Image 2026-07-31 at 17.06.18.jpeg" alt="Memory WhatsApp 1" loading="lazy">
+                        <span class="pin-icon">📍</span>
+                    </div>
+                    <div class="caption">Sunshine in My Life ☀️</div>
+                </div>
+
+                <div class="polaroid" onclick="appUI.openLightbox('images/WhatsApp Image 2026-07-31 at 17.06.13.jpeg', 'My Whole Heart ❤️')">
+                    <div class="polaroid-img-wrapper">
+                        <img src="images/WhatsApp Image 2026-07-31 at 17.06.13.jpeg" alt="Memory WhatsApp 2" loading="lazy">
+                        <span class="pin-icon">📍</span>
+                    </div>
+                    <div class="caption">My Whole Heart ❤️</div>
+                </div>
+
+                <div class="polaroid" onclick="appUI.openLightbox('images/WhatsApp Image 2026-07-31 at 17.06.12.jpeg', 'Cute Moments With You 💖')">
+                    <div class="polaroid-img-wrapper">
+                        <img src="images/WhatsApp Image 2026-07-31 at 17.06.12.jpeg" alt="Memory WhatsApp 3" loading="lazy">
+                        <span class="pin-icon">📍</span>
+                    </div>
+                    <div class="caption">Cute Moments With You 💖</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="favoriteVideosSection">
+            <div class="section-header">
+                <span class="section-tag">Watch On Repeat</span>
+                <h2 class="section-title gold-text">My Favorite Videos Of You 🎬💕</h2>
+            </div>
+            <p class="section-subtext">The two clips of you I keep going back to, over and over.</p>
+
+            <div class="video-grid">
+                <div class="video-card glass-panel">
+                    <video controls preload="metadata" style="width: 100%; border-radius: 12px;">
+                        <source src="images/58.mp4" type="video/mp4">
+                        Your browser does not support video playback.
+                    </video>
+                    <p class="video-caption">One of my favorite moments with you 💕</p>
+                </div>
+
+                <div class="video-card glass-panel">
+                    <video controls preload="metadata" style="width: 100%; border-radius: 12px;">
+                        <source src="images/59.mp4" type="video/mp4">
+                        Your browser does not support video playback.
+                    </video>
+                    <p class="video-caption">This one always makes me smile 😊</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="videoSection">
+            <div class="section-header">
+                <span class="section-tag">Moving Moments</span>
+                <h2 class="section-title">Our Video Memories Reel 🎥💕</h2>
+            </div>
+
+            <div class="video-grid">
+                <div class="video-card glass-panel">
+                    <video controls preload="metadata" style="width: 100%; border-radius: 12px;">
+                        <source src="images/21.mp4" type="video/mp4">
+                        Your browser does not support video playback.
+                    </video>
+                    <p class="video-caption">Special Video Memory #1 💖</p>
+                </div>
+
+                <div class="video-card glass-panel">
+                    <video controls preload="metadata" style="width: 100%; border-radius: 12px;">
+                        <source src="images/23.mp4" type="video/mp4">
+                        Your browser does not support video playback.
+                    </video>
+                    <p class="video-caption">Sweet Video Clip #2 ✨</p>
+                </div>
+
+                <div class="video-card glass-panel">
+                    <video controls preload="metadata" style="width: 100%; border-radius: 12px;">
+                        <source src="images/24.mp4" type="video/mp4">
+                        Your browser does not support video playback.
+                    </video>
+                    <p class="video-caption">Fun Memories #3 🌸</p>
+                </div>
+
+                <div class="video-card glass-panel">
+                    <video controls preload="metadata" style="width: 100%; border-radius: 12px;">
+                        <source src="images/25.mp4" type="video/mp4">
+                        Your browser does not support video playback.
+                    </video>
+                    <p class="video-caption">Unforgettable Memory #4 🎉</p>
+                </div>
+
+                <div class="video-card glass-panel">
+                    <video controls preload="metadata" style="width: 100%; border-radius: 12px;">
+                        <source src="images/26.mp4" type="video/mp4">
+                        Your browser does not support video playback.
+                    </video>
+                    <p class="video-caption">Adventures Together #5 🚀</p>
+                </div>
+
+                <div class="video-card glass-panel">
+                    <video controls preload="metadata" style="width: 100%; border-radius: 12px;">
+                        <source src="images/27.mp4" type="video/mp4">
+                        Your browser does not support video playback.
+                    </video>
+                    <p class="video-caption">Golden Hours #6 🌅</p>
+                </div>
+
+                <div class="video-card glass-panel">
+                    <video controls preload="metadata" style="width: 100%; border-radius: 12px;">
+                        <source src="images/WhatsApp Video 2026-07-31 at 17.06.17.mp4" type="video/mp4">
+                        Your browser does not support video playback.
+                    </video>
+                    <p class="video-caption">Special Recorded Reel 🎬💕</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="datePollSection">
+            <div class="section-header">
+                <span class="section-tag">Plan Our Next Adventure</span>
+                <h2 class="section-title">Pick Our Next Romantic Date Night 🥂</h2>
+            </div>
+            <p class="section-subtext">Choose what we should do next—I promise to make it unforgettable!</p>
+
+            <div class="date-options-grid">
+                <div class="date-card" onclick="appUI.voteDateNight(this, 'Stargazing & Picnic')">
+                    <div class="date-icon"><i class="fa-solid fa-utensils"></i></div>
+                    <h3>Romantic Picnic & Stargazing</h3>
+                    <p>Cozy blanket, your favorite snacks, and stargazing together under the midnight sky.</p>
+                    <button class="btn-vote">Vote For This 💖</button>
+                </div>
+
+                <div class="date-card" onclick="appUI.voteDateNight(this, 'Sunset Beach Walk')">
+                    <div class="date-icon"><i class="fa-solid fa-umbrella-beach"></i></div>
+                    <h3>Sunset Beach Walk</h3>
+                    <p>Walking hand in hand along the shore while watching the golden sunset colors.</p>
+                    <button class="btn-vote">Vote For This 💖</button>
+                </div>
+
+                <div class="date-card" onclick="appUI.voteDateNight(this, 'Cozy Movie Marathon')">
+                    <div class="date-icon"><i class="fa-solid fa-film"></i></div>
+                    <h3>Cozy Movie Marathon</h3>
+                    <p>Fairy lights, popcorn, endless cuddles, and watching our favorite comfort movies.</p>
+                    <button class="btn-vote">Vote For This 💖</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="quizSection">
+            <div class="section-header">
+                <span class="section-tag">How Well Do You Know Us?</span>
+                <h2 class="section-title">The Ultimate Love Quiz 🎯</h2>
+            </div>
+
+            <div class="quiz-container" id="quizContainer">
+                <span class="quiz-step" id="quizStep">Question 1 of 3</span>
+                <h3 class="quiz-question" id="quizQuestion">Loading question...</h3>
+                <div class="quiz-options" id="quizOptions"></div>
+            </div>
+        </section>
+
+        <section class="glass-card" id="couponsSection">
+            <div class="section-header">
+                <span class="section-tag">Redeemable Anytime</span>
+                <h2 class="section-title gold-text">Your Official Love Voucher Book 🎟️💕</h2>
+            </div>
+            <p class="section-subtext">Click any coupon below whenever you want to redeem it with me!</p>
+
+            <div class="coupons-grid">
+                <div class="coupon-card" id="coupon1">
+                    <div class="coupon-left">
+                        <div class="washi-tape"></div>
+                        <span class="coupon-badge">VOUCHER #01</span>
+                        <h3>1x Free Win Any Argument</h3>
+                        <p>Valid lifetime. No questions asked, you win automatically! 🏆</p>
+                    </div>
+                    <div class="coupon-right">
+                        <button class="btn-coupon" onclick="appUI.redeemCoupon('coupon1', 'Win Any Argument 🏆')">Redeem</button>
+                    </div>
+                </div>
+
+                <div class="coupon-card" id="coupon2">
+                    <div class="coupon-left">
+                        <div class="washi-tape"></div>
+                        <span class="coupon-badge">VOUCHER #02</span>
+                        <h3>1x Late Night Dessert Run</h3>
+                        <p>Craving ice cream or cake at 1 AM? I'm on my way to get it! 🍦</p>
+                    </div>
+                    <div class="coupon-right">
+                        <button class="btn-coupon" onclick="appUI.redeemCoupon('coupon2', 'Late Night Dessert Run 🍦')">Redeem</button>
+                    </div>
+                </div>
+
+                <div class="coupon-card" id="coupon3">
+                    <div class="coupon-left">
+                        <div class="washi-tape"></div>
+                        <span class="coupon-badge">VOUCHER #03</span>
+                        <h3>1x 30-Minute Full Massage</h3>
+                        <p>Complete relaxation, scented oils, and soothing foot/back massage. 💆‍♀️</p>
+                    </div>
+                    <div class="coupon-right">
+                        <button class="btn-coupon" onclick="appUI.redeemCoupon('coupon3', 'Full Massage 💆‍♀️')">Redeem</button>
+                    </div>
+                </div>
+
+                <div class="coupon-card" id="coupon4">
+                    <div class="coupon-left">
+                        <div class="washi-tape"></div>
+                        <span class="coupon-badge">VOUCHER #04</span>
+                        <h3>1x Movie Choice & Zero Complaints</h3>
+                        <p>You pick whichever movie or series we watch next, no matter what! 🎬</p>
+                    </div>
+                    <div class="coupon-right">
+                        <button class="btn-coupon" onclick="appUI.redeemCoupon('coupon4', 'Movie Choice Pass 🎬')">Redeem</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card proposal-card" id="proposalSection">
+            <div class="section-header">
+                <span class="section-tag">One Final Question</span>
+                <h2 class="section-title">Will You Keep Being My Girlfriend, Today & Forever? 💕</h2>
+            </div>
+            <p class="section-subtext">You make every single day feel brighter just by being in it.</p>
+
+            <div class="quiz-buttons">
+                <button class="btn-yes" onclick="appUI.celebrateLove()">YES! OF COURSE! 💖</button>
+                <button class="btn-no" id="noBtn" onmouseover="appUI.moveNoButton()" onclick="appUI.moveNoButton()">No 😜</button>
+            </div>
+        </section>
+
+    </div>
+
+    <div id="lightboxModal" class="modal-overlay" onclick="appUI.closeLightbox()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="appUI.closeLightbox()">&times;</button>
+            <img id="lightboxImg" src="" alt="Enlarged Memory">
+            <p id="lightboxCaption" class="modal-caption"></p>
+        </div>
+    </div>
+
+    <div id="celebrationModal" class="modal-overlay">
+        <div class="modal-content celebration-box">
+            <div class="trophy-icon">👑💖</div>
+            <h2>I AM THE LUCKIEST PERSON EVER!</h2>
+            <p>You made my heart skip a thousand beats! I love you endlessly, my beautiful girl! Happy Girlfriend Day! 🎉✨</p>
+            <button class="btn-main primary-btn" onclick="appUI.closeCelebration()">I Love You Too! ❤️</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>Designed & Crafted with Endless Love <i class="fa-solid fa-heart pulse-heart"></i></p>
+    </footer>
+
+    <nav class="floating-nav">
+    <a href="#timelineSection" title="Our Story"><i class="fa-solid fa-book-bookmark"></i></a>
+    <a href="#reasonsSection" title="Reasons I Love You"><i class="fa-solid fa-heart-circle-check"></i></a>
+    <a href="#musicSection" title="Our Song"><i class="fa-solid fa-music"></i></a>
+    <a href="#couponsSection" title="Vouchers"><i class="fa-solid fa-ticket"></i></a>
+    <a href="#bucketListSection" title="Bucket List"><i class="fa-solid fa-list-check"></i></a>
+    <a href="#proposalSection" title="Final Surprise"><i class="fa-solid fa-heart"></i></a>
+    </nav>
+
+    <script src="mybaby.js"></script>
+    <script src="princess.js"></script>
+    <script src="love.js"></script>
+</body>
+</html>
